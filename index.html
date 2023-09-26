@@ -1,0 +1,58 @@
+<input></input>
+<button>fetch</button>
+<h2>connections: 0</h2>
+<div></div>
+
+<script>
+  const input = document.getElementsByTagName('input')[0]
+  const button = document.getElementsByTagName('button')[0]
+  const div = document.getElementsByTagName('div')[0]
+  const h2 = document.getElementsByTagName('h2')[0]
+
+  let currentUrl = 0
+  let connections = 0
+
+  const urls = [
+    'https://pubsubprovider.xyz/test/',
+    'https://a.pubsubprovider.xyz/test/',
+    'https://b.pubsubprovider.xyz/test/',
+    'https://c.pubsubprovider.xyz/test/',
+    'https://d.pubsubprovider.xyz/test/',
+    'https://e.pubsubprovider.xyz/test/',
+    'https://f.pubsubprovider.xyz/test/',
+    'https://g.pubsubprovider.xyz/test/',
+    'https://h.pubsubprovider.xyz/test/',
+    'https://ethrpc.xyz/test/',
+    'https://ipfsgateway.xyz/test/'
+  ]
+
+  const getUrl = () => {
+    const url = urls[Math.floor(urls.length * Math.random())]
+    return url + Math.round(5 * 60 * Math.random() + 100)
+  }
+
+  input.value = getUrl()
+
+  button.addEventListener('click', async () => {
+    const p = document.createElement('p')
+    p.textContent = `fetching ${input.value}`
+    div.appendChild(p)
+    h2.textContent = `connections: ${++connections}`
+
+    let res, text, error
+    try {
+      const url = getUrl()
+      input.value = url
+      res = await fetch(url, {cache: 'no-cache'})
+      text = await res.text()
+    }
+    catch (e) {
+      error = e
+    }
+
+    h2.textContent = `connections: ${--connections}`
+    p.remove()
+
+    console.log(res, text, error)
+  })
+</script>
